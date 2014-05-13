@@ -4,6 +4,7 @@
     Author     : Fernando
 --%>
 
+<%@page import="java.util.Vector"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
 <%@page import="chatServer.Server"%>
@@ -20,55 +21,52 @@
     </head>
     <body>
         <%
-         ChatManager chatManager = ChatManager.getInstance();
-         if(request.getSession().getAttribute("login") == null){
-             response.sendRedirect("index.jsp");
-         }
-         String login = request.getSession().getAttribute("login").toString();
-         %>
-         <h1>Ben vindo: ${login}</h1>
-         <%
-         if(request.getParameter("message") != null){
-            String messageToserver = "-m@"+login+"&"+request.getParameter("message");
-            chatManager.sendMessage(messageToserver);
-         }
-            
-        ArrayList<String> clientMessages = chatManager.getClientMessages(login);
-        pageContext.setAttribute("clientMessages", clientMessages);
-        ArrayList<String> serverMessages = Server.getMessages();
-            if(serverMessages != null){
-                pageContext.setAttribute("serverMessages", serverMessages);
-            }    
-        pageContext.setAttribute("serverMessages", serverMessages);
-        
+            ChatManager chatManager = ChatManager.getInstance();
+//         if(request.getSession().getAttribute("login") == null){
+//             response.sendRedirect("index.jsp");
+//         }
+            String login = request.getSession().getAttribute("login").toString();
         %>
-        <div class id="part">
-        <p class="ind">MENSAGENS ENVIADAS</p>
-        <div>
-            <c:forEach var="message" items="${clientMessages}">
-                <p>${message}</p>
-            </c:forEach>
+        <h1>Ben vindo: ${login}</h1>
+        <%
+            if (request.getParameter("message") != null) {
+                String messageToserver = "-m@" + login + "&" + request.getParameter("message");
+                chatManager.sendMessage(messageToserver);
+            }
+
+            Vector<String> clientMessages = chatManager.getClientMessages(login);
+            pageContext.setAttribute("clientMessages", clientMessages);
+            Vector serverMessages = chatManager.getServerMessages();
+            if (serverMessages != null) {
+                pageContext.setAttribute("serverMessages", serverMessages);
+            }
+            pageContext.setAttribute("serverMessages", serverMessages);
+
+        %>
+        <div class="label">
+            <p class="ind">MENSAGENS ENVIADAS</p>
+            <div class="msgs">
+                <c:forEach var="message" items="${clientMessages}">
+                    <p class="m">${message}</p>
+                </c:forEach>
+            </div>
         </div>
+        <div class="label"><p class="ind">MENSAGENS RECEBIDAS</p>
+            <div class="msgs">       
+                <form>
+                    <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
+                </form>
+                <c:forEach var="message" items="${serverMessages}">
+                    <p class="m">${message}</p>
+                </c:forEach>
+            </div>
         </div>
-        <div class id="part">
-         <p class="ind">MENSAGENS RECEBIDAS</p>   
-         <form>
-            <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
-          </form>
-         <c:if test="${serverMessages.size() != 0}">
-         <div>    
-          <c:forEach var="message" items="${serverMessages}">
-                <p>${message}</p>
-            </c:forEach>
-         </div>
-         </c:if>
-         </div>
-            <form method="POST" action="chat.jsp">
-                <input type="text" placeholder="Mensagem" name="message"  autofocus="autofocus" id="message">
-                <input type="submit" value="Enviar">
-            </form>
-            <form method="POST" action="logout">
-                <input type="submit" value="Sair">
-            </form>
+        <form method="POST" action="chat.jsp">
+            <input type="text" placeholder="Mensagem" name="message"  autofocus="autofocus" id="message">
+            <input type="submit" value="Enviar">
+        </form>
+        <form method="POST" action="logout">
+            <input type="submit" value="Sair">
+        </form>
     </body>
 </html>

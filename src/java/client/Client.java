@@ -22,12 +22,9 @@ import manager.ChatManager;
 public class Client {
     private Socket socket;
     private final InetSocketAddress inetSocketAddress;
-    private String login;
-    private ArrayList<String> messages = new ArrayList();
-    
-    public Client(String ip, int port, String login){
+
+    public Client(String ip, int port){
         this.inetSocketAddress = new InetSocketAddress(ip, port);
-        this.login = login;
     }
     
     public InetSocketAddress getInetSocketAddress() {
@@ -38,18 +35,18 @@ public class Client {
         return socket;
     }
     
-    public void addMessage(String msg){
-        this.messages.add(msg);
-        try {
-            Thread.sleep((long) 30);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public ArrayList<String> getMessages() {
-        return messages;
-    }
+//    public void addMessage(String msg){
+//        this.messages.add(msg);
+//        try {
+//            Thread.sleep((long) 30);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+//
+//    public ArrayList<String> getMessages() {
+//        return messages;
+//    }
     
     public void sendMessage(String message){
         try {

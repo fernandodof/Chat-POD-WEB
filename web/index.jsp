@@ -3,6 +3,7 @@
     Created on : 2-May-2014, 9:13:53 AM
     Author     : Fernando
 --%>
+<%@page import="java.util.Vector"%>
 <%@page import="chatServer.Server"%>
 <%@page import="manager.ChatManager"%>
 <%@page import="java.lang.reflect.Array"%>
@@ -17,7 +18,8 @@
         <link href="/ProjetoChatPodWeb/cssGeral.css" type="text/css" rel="stylesheet">
     </head>
     <body>
-        <%  if(request.getSession().getAttribute("login") != null){
+        <%  
+            if(request.getSession().getAttribute("login") != null){
                 response.sendRedirect("chat.jsp");
             }
         %>
@@ -34,20 +36,19 @@
 
         <%
             ChatManager chatManager = ChatManager.getInstance();
-            ArrayList<String> serverMessages = Server.getMessages();
+            Vector<String> serverMessages = chatManager.getServerMessages();
             pageContext.setAttribute("serverMessages", serverMessages);
         %>
-        <div class id="part">
-        <div>
-          <p class="ind">MENSAGENS RECEBIDAS</p>  
-          <form>
+        <div class="label"><p class="ind">MENSAGENS RECEBIDAS</p>
+        <div class="msgs">       
+         <form>
             <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
-          </form>
-          <c:forEach var="message" items="${serverMessages}">
-                <p>${message}</p>
+         </form>
+            <c:forEach var="message" items="${serverMessages}">
+                <p class="m">${message}</p>
             </c:forEach>
         </div>
         </div>
-    </body>
+ </body>
 
 </html>

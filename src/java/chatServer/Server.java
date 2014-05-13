@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import loginService.LoginService;
@@ -20,7 +21,8 @@ import manager.ChatManager;
 public class Server{
     private ServerSocket serverSocket;
     private Socket socket;
-    private static ArrayList<String> messages;
+    //private static ArrayList<String> messages;
+    private static Vector<String> msgs = new Vector<String>();
     private static Server instance=null;
     
     private static int port=10999;
@@ -49,13 +51,13 @@ public class Server{
             thread.start();
         }    }
     
-    public static ArrayList<String> getMessages(){
-          if (messages == null){
-            return messages = new ArrayList<>();
-          }else {
-            return messages;
-          }
-    }
+//    public static ArrayList<String> getMessages(){
+//          if (messages == null){
+//            return messages = new ArrayList<>();
+//          }else {
+//            return messages;
+//          }
+//    }
     
     public class ThreadClass implements Runnable{
     
@@ -87,7 +89,6 @@ public class Server{
                             serverResponse = "Invalid Credentials";
                         }
                     System.out.println(serverResponse);
-//                    socket.getOutputStream().write(serverResponse.getBytes());
                         PrintWriter printWriter = new PrintWriter(this.socket.getOutputStream());
                         printWriter.println(serverResponse);
                         printWriter.flush();
@@ -98,7 +99,8 @@ public class Server{
                         menssage = messageParts[1];
                         serverResponse = login + " disse: " + menssage;
                         //2 times
-                        getMessages().add(serverResponse);
+                        msgs.add(serverResponse);
+                        ChatManager.getInstance().addServerMessages(msgs);
                         System.out.println(serverResponse);
                     } else {
                         serverResponse = "INVALID COMMUNICATION PROTOCOL";
@@ -106,16 +108,12 @@ public class Server{
                     }
                                         
                 } catch (IOException ex) {
-                    Logger.getLogger(Server1.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                     return;
                 }
             }
     }
     
 }
-    
-//public static void main(String[] args) {
-//    //new Server(10999);
-//}   
 
 }
