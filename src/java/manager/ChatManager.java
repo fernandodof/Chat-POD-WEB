@@ -17,18 +17,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ChatManager {
 
-    private static Client client;
-    private static HashMap<String,ArrayList<String>> clientMessages = new HashMap();
-    private static ArrayList<String> serverMessages = new ArrayList();
-    private static ArrayList<String> serverMessages1 = new ArrayList();
+    private Client client;
+    //private List messages = Collections.synchronizedList(new ArrayList()); 
+    //private static HashMap<String,ArrayList<String>> clientMessages = new HashMap();
     //private static final Server server = new Server(10999);
-
+    //CopyOnWriteArrayList<String>
     private static ChatManager instance = null;
 
     public static ChatManager getInstance() {
@@ -43,14 +44,14 @@ public class ChatManager {
        
     }
 
-    public ArrayList<String> getClientMessages(String login) {
-        return clientMessages.get(login);
+    public List getClientMessages() {
+        return this.client.getMessages();
     }
 
     public String createClient(String ip, int port, String loginMessage) {
         InputStream inputStream = null;
         String message = null;
-        client = new Client(ip, port);
+        client = new Client(ip, port,loginMessage.replace("-l@", "").split("&")[0]);
         try {
 
             client.sendMessage(loginMessage);
@@ -62,8 +63,9 @@ public class ChatManager {
             InputStreamReader inputStreamReader = new InputStreamReader(this.client.getSocket().getInputStream());
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             message = bufferedReader.readLine().trim();
-            if(message.equalsIgnoreCase("ok"))
-                clientMessages.put(loginMessage.replace("-l@", "").split("&")[0], new ArrayList<String>());
+            if(message.equalsIgnoreCase("ok")){
+               // clientMessages.put(loginMessage.replace("-l@", "").split("&")[0], new ArrayList<String>());
+            }
         } catch (IOException ex) {
             Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,17 +74,18 @@ public class ChatManager {
 
     public void sendMessage(String message) {
         client.sendMessage(message);
-        clientMessages.get(message.replace("-m@", "").split("&")[0]).add("Você disse: " + message.replace("-m@", "").split("&")[1]);
+        //clientMessages.get(message.replace("-m@", "").split("&")[0]).add("Você disse: " + message.replace("-m@", "").split("&")[1]);
+        this.client.addMessage("Você disse: " + message.replace("-m@", "").split("&")[1]);
     }
 
-    public void addServerMessage(String message){
-//        System.out.println("M: "+ message);
-//        System.out.println("Insertion: "+serverMessages.add(message));
-//        System.out.println("S: "+ serverMessages.size());
-        serverMessages.add(message);
-    }
-    
-    public ArrayList<String> getServerMessages(){
-        return serverMessages;
-    }
+//    public void addServerMessage(String message){
+////        System.out.println("M: "+ message);
+////        System.out.println("Insertion: "+serverMessages.add(message));
+////        System.out.println("S: "+ serverMessages.size());
+//        serverMessages.add(message);
+//    }
+//    
+//    public ArrayList<String> getServerMessages(){
+//        return serverMessages;
+//    }
 }

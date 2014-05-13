@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import manager.ChatManager;
 
 /**
  *
@@ -20,10 +22,10 @@ import java.util.logging.Logger;
 public class Client {
     private Socket socket;
     private final InetSocketAddress inetSocketAddress;
-    private String messageClient;
     private String login;
+    private ArrayList<String> messages = new ArrayList();
     
-    public Client(String ip, int port){
+    public Client(String ip, int port, String login){
         this.inetSocketAddress = new InetSocketAddress(ip, port);
         this.login = login;
     }
@@ -32,20 +34,21 @@ public class Client {
         return inetSocketAddress;
     }
 
-    public String getMessageClient() {
-        return messageClient;
-    }
-
-    public void setMessageClient(String messageClient) {
-        this.messageClient = messageClient;
-    }
-
     public Socket getSocket() {
         return socket;
     }
+    
+    public void addMessage(String msg){
+        this.messages.add(msg);
+        try {
+            Thread.sleep((long) 30);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
+    public ArrayList<String> getMessages() {
+        return messages;
     }
     
     public void sendMessage(String message){

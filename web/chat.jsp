@@ -4,6 +4,8 @@
     Author     : Fernando
 --%>
 
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.List"%>
 <%@page import="chatServer.Server"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="manager.ChatManager"%>
@@ -25,13 +27,15 @@
             chatManager.sendMessage(messageToserver);
          }
             
-        ArrayList<String> clientMessages = chatManager.getClientMessages(login);
+        List clientMessages = Collections.synchronizedList(new ArrayList()); 
+        clientMessages = chatManager.getClientMessages();
         pageContext.setAttribute("clientMessages", clientMessages);
         ArrayList<String> serverMessages = Server.getMessages();
             if(serverMessages != null){
                 pageContext.setAttribute("serverMessages", serverMessages);
             }    
         pageContext.setAttribute("serverMessages", serverMessages);
+        
         %>
         <div>
             <p class="ind">MENSAGENS ENVIADAS</p>  
@@ -49,8 +53,11 @@
             </c:forEach>
         </div>
             <form method="POST" action="chat.jsp">
-            <input type="text" placeholder="Mensagem" name="message">
-            <input type="submit" value="Enviar">
-        </form>
+                <input type="text" placeholder="Mensagem" name="message">
+                <input type="submit" value="Enviar">
+            </form>
+            <form method="POST" action="logout">
+                <input type="submit" value="Sair">
+            </form>
     </body>
 </html>

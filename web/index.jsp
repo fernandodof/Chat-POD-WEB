@@ -14,6 +14,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Chat POD</title>
+        <link href="/ProjetoChatPodWeb/cssGeral.css" type="text/css" rel="stylesheet">
     </head>
     <body>
         <h1>Chat POD</h1>

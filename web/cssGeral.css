@@ -13,10 +13,12 @@ form{
     clear: left;
 }
 
-div.p{
-    float: left;
-    clear:right;
+div *{
+    clear:left;
+    float:left;
+    margin: 0.2px;
 }
+
 
 div form{
     float: left;
