@@ -35,7 +35,7 @@
          <form>
             <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
         </form>
-        <div id="messages" style="width:400px; height:400px; overflow: auto;">
+        <div id="messages">
             <c:forEach var="message" items="${serverMessages}">
                 <p>${message}</p>
             </c:forEach>

@@ -4,9 +4,33 @@
         <servlet-name>ComunicateServer</servlet-name>
         <servlet-class>servlets.ComunicateServer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>servlets.logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>sendMessages</servlet-name>
+        <servlet-class>servlets.sendMessages</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>sendMessagesToServer</servlet-name>
+        <servlet-class>servlets.sendMessages</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ComunicateServer</servlet-name>
         <url-pattern>/ComunicateServer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>sendMessages</servlet-name>
+        <url-pattern>/sendMessages</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>sendMessagesToServer</servlet-name>
+        <url-pattern>/sendMessagesToServer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

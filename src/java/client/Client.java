@@ -18,14 +18,14 @@ import java.util.logging.Logger;
  * @author Fernando
  */
 public class Client {
-
     private Socket socket;
     private final InetSocketAddress inetSocketAddress;
-    private PrintWriter printWriter;
     private String messageClient;
+    private String login;
     
     public Client(String ip, int port){
         this.inetSocketAddress = new InetSocketAddress(ip, port);
+        this.login = login;
     }
     
     public InetSocketAddress getInetSocketAddress() {
@@ -46,10 +46,6 @@ public class Client {
 
     public void setSocket(Socket socket) {
         this.socket = socket;
-    }
-    
-    public PrintWriter getPrintWriter(){
-        return this.printWriter;
     }
     
     public void sendMessage(String message){

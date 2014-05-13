@@ -17,13 +17,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ChatManager {
 
     private static Client client;
-    private static ArrayList<String> clientMessages = new ArrayList();
+    private static HashMap<String,ArrayList<String>> clientMessages = new HashMap();
     private static ArrayList<String> serverMessages = new ArrayList();
     private static ArrayList<String> serverMessages1 = new ArrayList();
     //private static final Server server = new Server(10999);
@@ -42,8 +43,8 @@ public class ChatManager {
        
     }
 
-    public ArrayList<String> getClientMessages() {
-        return clientMessages;
+    public ArrayList<String> getClientMessages(String login) {
+        return clientMessages.get(login);
     }
 
     public String createClient(String ip, int port, String loginMessage) {
@@ -60,17 +61,18 @@ public class ChatManager {
 //            message = new String(b);
             InputStreamReader inputStreamReader = new InputStreamReader(this.client.getSocket().getInputStream());
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            message = bufferedReader.readLine();
-            
+            message = bufferedReader.readLine().trim();
+            if(message.equalsIgnoreCase("ok"))
+                clientMessages.put(loginMessage.replace("-l@", "").split("&")[0], new ArrayList<String>());
         } catch (IOException ex) {
             Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return message.trim();
+        return message;
     }
 
     public void sendMessage(String message) {
         client.sendMessage(message);
-        clientMessages.add("Você disse: " + message.replace("-m@", "").split("&")[1]);
+        clientMessages.get(message.replace("-m@", "").split("&")[0]).add("Você disse: " + message.replace("-m@", "").split("&")[1]);
     }
 
     public void addServerMessage(String message){

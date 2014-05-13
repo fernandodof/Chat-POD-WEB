@@ -14,17 +14,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link href="/ProjetoChatPodWeb/cssGeral.css" type="text/css" rel="stylesheet">
     </head>
     <body>
         <%
          ChatManager chatManager = ChatManager.getInstance();
-            String login = request.getSession().getAttribute("login").toString();
-            if(request.getParameter("message") != null){
-                String messageToserver = "-m@"+login+"&"+(request.getParameter("message").toString());
-                chatManager.sendMessage(messageToserver);
-            }
+         String login = request.getSession().getAttribute("login").toString();
+         if(request.getParameter("message") != null){
+            String messageToserver = "-m@"+login+"&"+request.getParameter("message");
+            chatManager.sendMessage(messageToserver);
+         }
             
-        ArrayList<String> clientMessages = chatManager.getClientMessages();
+        ArrayList<String> clientMessages = chatManager.getClientMessages(login);
         pageContext.setAttribute("clientMessages", clientMessages);
         ArrayList<String> serverMessages = Server.getMessages();
             if(serverMessages != null){
@@ -32,25 +33,24 @@
             }    
         pageContext.setAttribute("serverMessages", serverMessages);
         %>
-        <div id="clienteMessages" style="width:400px; height:400px; overflow: auto;">
+        <div>
+            <p class="ind">MENSAGENS ENVIADAS</p>  
             <c:forEach var="message" items="${clientMessages}">
                 <p>${message}</p>
             </c:forEach>
         </div>
-        <form method="POST" action="chat.jsp">
-            <input type="text" placeholder="Mensagem" name="message">
-            <input type="submit" value="Enviar">
-        </form>
-        <br>
-        <p>MENSAGENS NO SERVIDOR</p>
-        <div id="ServerMessages" style="width:400px; height:400px; overflow: auto;">
-           <c:forEach var="message" items="${serverMessages}">
+        <div>
+          <p class="ind">MENSAGENS RECEBIDAS</p>  
+          <form>
+            <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
+          </form>
+          <c:forEach var="message" items="${serverMessages}">
                 <p>${message}</p>
             </c:forEach>
         </div>
-        
-        <form>
-            <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
+            <form method="POST" action="chat.jsp">
+            <input type="text" placeholder="Mensagem" name="message">
+            <input type="submit" value="Enviar">
         </form>
     </body>
 </html>

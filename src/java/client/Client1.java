@@ -54,6 +54,6 @@ public class Client1 extends Thread{
     }
     
     public static void main(String[] args) {
-        new Client1("192.168.0.135", 10999);
+        new Client1("localhost", 10999);
     }
 }
