@@ -17,6 +17,11 @@
         <link href="/ProjetoChatPodWeb/cssGeral.css" type="text/css" rel="stylesheet">
     </head>
     <body>
+        <%  if(request.getSession().getAttribute("login") != null){
+                response.sendRedirect("chat.jsp");
+            }
+        %>
+        
         <h1>Chat POD</h1>
 
         <form method="POST" action="ComunicateServer">
@@ -32,16 +37,17 @@
             ArrayList<String> serverMessages = Server.getMessages();
             pageContext.setAttribute("serverMessages", serverMessages);
         %>
-        <p>MENSAGENS NO SERVIDOR</p>
-         <form>
+        <div class id="part">
+        <div>
+          <p class="ind">MENSAGENS RECEBIDAS</p>  
+          <form>
             <input TYPE="button" onClick="history.go(0)" VALUE="Recarregar">
-        </form>
-        <div id="messages">
-            <c:forEach var="message" items="${serverMessages}">
+          </form>
+          <c:forEach var="message" items="${serverMessages}">
                 <p>${message}</p>
             </c:forEach>
         </div>
-
+        </div>
     </body>
 
 </html>

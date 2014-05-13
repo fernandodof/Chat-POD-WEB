@@ -1,6 +1,6 @@
 div{
-    width:500px;
-    height:600px;
+    width:400px;
+    height:450px;
     overflow: auto;
     border: 1px solid #A3A3A3;
     float: left;
@@ -19,16 +19,21 @@ div *{
     margin: 0.2px;
 }
 
-
 div form{
     float: left;
     clear: right;
+    position: fixed;
+    margin-left: 302px;
 }
 
-div p.ind{
+p.ind{
     color: darkblue;
     font-weight: bold;
     margin-bottom: 3px;
     margin-top: 0px;
     clear: left;
+}
+
+#message{
+    width: 330px;
 }

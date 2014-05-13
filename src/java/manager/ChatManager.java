@@ -26,8 +26,10 @@ import java.util.logging.Logger;
 public class ChatManager {
 
     private Client client;
+    private ArrayList <Client> clientes = new ArrayList();
+    private ArrayList<String> serverMessages = new ArrayList();
     //private List messages = Collections.synchronizedList(new ArrayList()); 
-    //private static HashMap<String,ArrayList<String>> clientMessages = new HashMap();
+    private static HashMap<String,ArrayList<String>> clientMessages = new HashMap();
     //private static final Server server = new Server(10999);
     //CopyOnWriteArrayList<String>
     private static ChatManager instance = null;
@@ -44,8 +46,8 @@ public class ChatManager {
        
     }
 
-    public List getClientMessages() {
-        return this.client.getMessages();
+    public ArrayList<String> getClientMessages(String login) {
+        return clientMessages.get(login);
     }
 
     public String createClient(String ip, int port, String loginMessage) {
@@ -64,7 +66,8 @@ public class ChatManager {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             message = bufferedReader.readLine().trim();
             if(message.equalsIgnoreCase("ok")){
-               // clientMessages.put(loginMessage.replace("-l@", "").split("&")[0], new ArrayList<String>());
+                clientMessages.put(loginMessage.replace("-l@", "").split("&")[0], new ArrayList<String>());
+                //clientes.add(client);
             }
         } catch (IOException ex) {
             Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -74,18 +77,22 @@ public class ChatManager {
 
     public void sendMessage(String message) {
         client.sendMessage(message);
-        //clientMessages.get(message.replace("-m@", "").split("&")[0]).add("Você disse: " + message.replace("-m@", "").split("&")[1]);
-        this.client.addMessage("Você disse: " + message.replace("-m@", "").split("&")[1]);
+        clientMessages.get(message.replace("-m@", "").split("&")[0]).add("Você disse: " + message.replace("-m@", "").split("&")[1]);
+        try {
+            Thread.sleep((long) 30);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ChatManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-//    public void addServerMessage(String message){
-////        System.out.println("M: "+ message);
-////        System.out.println("Insertion: "+serverMessages.add(message));
-////        System.out.println("S: "+ serverMessages.size());
-//        serverMessages.add(message);
-//    }
-//    
-//    public ArrayList<String> getServerMessages(){
-//        return serverMessages;
-//    }
+    public void addServerMessage(String message){
+//        System.out.println("M: "+ message);
+//        System.out.println("Insertion: "+serverMessages.add(message));
+//        System.out.println("S: "+ serverMessages.size());
+        serverMessages.add(message);
+    }
+    
+    public ArrayList<String> getServerMessages(){
+        return serverMessages;
+    }
 }

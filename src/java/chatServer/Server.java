@@ -107,6 +107,7 @@ public class Server{
                                         
                 } catch (IOException ex) {
                     Logger.getLogger(Server1.class.getName()).log(Level.SEVERE, null, ex);
+                    return;
                 }
             }
     }
